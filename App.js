@@ -5,6 +5,7 @@ import StartPage from "./Pages/StartPage";
 import LogIn from "./Pages/LogIn";
 import SignUp from "./Pages/SignUp";
 import Home from "./Pages/Home";
+import Index from "./Pages/index";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ export default function App(){
         <Stack.Screen name="LogIn" component={LogIn} options={{headerShown:false}}/>
         <Stack.Screen name="SignUp" component={SignUp} options={{headerShown:false}}/>
         <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
+        <Stack.Screen name="Index" component={Index} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -18,6 +18,12 @@ export default function App() {
   const navigation = useNavigation();
   const [getImage, setImage] = useState(null);
 
+  const [getFirstName, setFirstName] = useState("");
+  const [getLastName, setLastName] = useState("");
+  const [getMobile, setMobile] = useState("");
+  const [getEmail, setEmail] = useState("");
+  const [getPassword, setPassword] = useState("");
+
   return (
     <SafeAreaView style={styles.SafeAreaView1}>
       <ScrollView>
@@ -49,6 +55,9 @@ export default function App() {
               style={styles.input1}
               inputMode={"text"}
               maxLength={20}
+              onChangeText={(text) => {
+                setFirstName(text);
+              }}
             />
 
             <Text style={styles.textInput1}>Last Name</Text>
@@ -56,16 +65,29 @@ export default function App() {
               style={styles.input1}
               inputMode={"text"}
               maxLength={20}
+              onChangeText={(text) => {
+                setLastName(text);
+              }}
             />
 
             <Text style={styles.textInput1}>Mobile</Text>
-            <TextInput style={styles.input1} inputMode={"tel"} maxLength={10} />
+            <TextInput
+              style={styles.input1}
+              inputMode={"tel"}
+              maxLength={10}
+              onChangeText={(text) => {
+                setMobile(text);
+              }}
+            />
 
             <Text style={styles.textInput1}>Email</Text>
             <TextInput
               style={styles.input1}
               inputMode={"email"}
               maxLength={45}
+              onChangeText={(text) => {
+                setEmail(text);
+              }}
             />
 
             <Text style={styles.textInput1}>Password</Text>
@@ -73,12 +95,54 @@ export default function App() {
               style={styles.input1}
               secureTextEntry={true}
               maxLength={25}
+              onChangeText={(text) => {
+                setPassword(text);
+              }}
             />
           </View>
 
           <Pressable
             style={styles.StBtn1}
-            onPress={() => navigation.navigate("LogIn")}
+            onPress={async () => {
+              let formData = new FormData();
+              formData.append("firstName", getFirstName);
+              formData.append("lastName", getLastName);
+              formData.append("mobile", getMobile);
+              formData.append("email", getEmail);
+              formData.append("password", getPassword);
+             
+              if (getImage != null) {
+                formData.append("avatarImage",
+
+                  {
+                    name: "avatar.png",
+                    type: "image/png",
+                    uri: getImage,
+                  }
+                );
+              }
+
+              let response = await fetch(
+                "http://192.168.56.1:8080/Quick_Chat/SignUp",
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
+
+              if (response.ok) {
+                let json = await response.json();
+                // Alert.alert("Response", json.message);
+
+                if (json.success) {
+                  //sign up success
+                  Alert.alert("Success", json.message);
+                } else {
+                  //sign up problem
+                  Alert.alert("Error", json.message);
+                }
+              }
+            }}
           >
             <Text style={styles.btnText}>Register</Text>
           </Pressable>

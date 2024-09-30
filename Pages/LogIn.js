@@ -51,7 +51,7 @@ export default function App() {
 
           <Pressable
             style={styles.StBtn1}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => navigation.navigate("Index")}
           >
             <Text style={styles.btnText}>Log In</Text>
           </Pressable>
