@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Pressable,
   SafeAreaView,
@@ -10,14 +11,16 @@ import {
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import Checkbox from 'expo-checkbox';
-import { useState } from 'react';
-
+import Checkbox from "expo-checkbox";
+import { useState } from "react";
 
 export default function App() {
   const navigation = useNavigation();
   const [isChecked, setChecked] = useState(false);
   const logInImageP = require("../assets/Images/loginimage.png");
+
+  const [getMobile, setMobile] = useState("");
+  const [getPassword, setPassword] = useState("");
 
   return (
     <SafeAreaView style={styles.SafeAreaView1}>
@@ -29,13 +32,23 @@ export default function App() {
 
           <View style={styles.view2}>
             <Text style={styles.textInput1}>Mobile</Text>
-            <TextInput style={styles.input1} inputMode={"tel"} maxLength={10} />
+            <TextInput
+              style={styles.input1}
+              inputMode={"tel"}
+              maxLength={10}
+              onChangeText={(text) => {
+                setMobile(text);
+              }}
+            />
 
             <Text style={styles.textInput1}>Password</Text>
             <TextInput
               style={styles.input1}
               secureTextEntry={true}
               maxLength={25}
+              onChangeText={(text) => {
+                setPassword(text);
+              }}
             />
             <View style={styles.frogotText}>
               <Checkbox
@@ -51,7 +64,40 @@ export default function App() {
 
           <Pressable
             style={styles.StBtn1}
-            onPress={() => navigation.navigate("Index")}
+            onPress={async () =>
+              // navigation.navigate("Index")
+              {
+                let response = await fetch(
+                  "http://192.168.56.1:8080/Quick_Chat/SignIn",
+                  {
+                    method: "POST",
+                    body: JSON.stringify({
+                      mobile: getMobile,
+                      password: getPassword,
+                    }),
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+                if (response.ok) {
+                  let json = await response.json();
+
+                  if (json.success) {
+                    let user = json.user;
+                    Alert.alert(
+                      "Success",
+                      "Hello " +
+                        user.first_name +
+                        "! , Your Account " +
+                        json.message
+                    );
+                  } else {
+                    Alert.alert("Error", json.message);
+                  }
+                }
+              }
+            }
           >
             <Text style={styles.btnText}>Log In</Text>
           </Pressable>
@@ -91,7 +137,7 @@ const styles = StyleSheet.create({
   },
   view2: {
     width: "100%",
-    marginBottom:20,
+    marginBottom: 20,
     // backgroundColor: "red",
   },
   frogotText: {
@@ -108,7 +154,7 @@ const styles = StyleSheet.create({
   remeb: {
     fontSize: 14,
     // color: "blue",
-    marginRight:"30%",
+    marginRight: "30%",
   },
   froget1: {
     fontSize: 14,
@@ -125,8 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: "#00BFA6",
     borderWidth: 2,
-    marginBottom:5,
-    
+    marginBottom: 5,
   },
   btnText: {
     fontSize: 22,
