@@ -55,6 +55,7 @@ export default function App() {
               style={styles.input1}
               inputMode={"text"}
               maxLength={20}
+              placeholder="Your First Name"
               onChangeText={(text) => {
                 setFirstName(text);
               }}
@@ -65,6 +66,7 @@ export default function App() {
               style={styles.input1}
               inputMode={"text"}
               maxLength={20}
+              placeholder="Your Last Name"
               onChangeText={(text) => {
                 setLastName(text);
               }}
@@ -75,6 +77,7 @@ export default function App() {
               style={styles.input1}
               inputMode={"tel"}
               maxLength={10}
+              placeholder="Your Mobile"
               onChangeText={(text) => {
                 setMobile(text);
               }}
@@ -85,6 +88,7 @@ export default function App() {
               style={styles.input1}
               inputMode={"email"}
               maxLength={45}
+              placeholder="Your Email"
               onChangeText={(text) => {
                 setEmail(text);
               }}
@@ -95,6 +99,7 @@ export default function App() {
               style={styles.input1}
               secureTextEntry={true}
               maxLength={25}
+              placeholder="Your Password"
               onChangeText={(text) => {
                 setPassword(text);
               }}
@@ -137,6 +142,8 @@ export default function App() {
                 if (json.success) {
                   //sign up success
                   Alert.alert("Success", json.message);
+                  navigation.navigate("LogIn")
+
                 } else {
                   //sign up problem
                   Alert.alert("Error", json.message);

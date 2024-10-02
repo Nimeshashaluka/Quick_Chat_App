@@ -13,6 +13,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import Checkbox from "expo-checkbox";
 import { useState } from "react";
+import AsyncStorage, { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const navigation = useNavigation();
@@ -36,6 +37,7 @@ export default function App() {
               style={styles.input1}
               inputMode={"tel"}
               maxLength={10}
+              placeholder="Your Mobile"
               onChangeText={(text) => {
                 setMobile(text);
               }}
@@ -46,6 +48,7 @@ export default function App() {
               style={styles.input1}
               secureTextEntry={true}
               maxLength={25}
+              placeholder="Your Password"
               onChangeText={(text) => {
                 setPassword(text);
               }}
@@ -92,6 +95,15 @@ export default function App() {
                         "! , Your Account " +
                         json.message
                     );
+
+                    try{
+                      await AsyncStorage.setItem("user",JSON.stringify(user));
+
+                    }catch(e){
+
+                    }
+
+                    navigation.navigate("Home")
                   } else {
                     Alert.alert("Error", json.message);
                   }
